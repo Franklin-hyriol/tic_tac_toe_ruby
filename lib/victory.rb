@@ -12,6 +12,8 @@ def victory?(array)
 		return 2
 	elsif array[0] == 2 && array[4] == 2 && array[8] == 2 || array[2] == 2 && array[4] == 2 && array[6] == 2
 		return 2
+	elsif array[0] != 0 && array[1] != 0 && array[2] != 0 && array[3] != 0 && array[4] != 0 && array[5] != 0 && array[6] != 0 && array[7] != 0 && array[8] != 0
+		return 3
 	else
 		return 0
 	end

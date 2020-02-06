@@ -84,26 +84,24 @@ begin
 
       dans_le_menu = 1
       win.keypad(true)
-      curs_set(1)
+      curs_set(0)
+      choix = 0
+      Curses.noecho
 
       while dans_le_menu
         win.setpos(26, 24)
-        win.addstr("votre choix: ")
+        win.attron(color_pair(COLOR_WHITE)|A_BLINK)
+        win.addstr("votre choix")
+        win.attron(color_pair(COLOR_WHITE)|A_NORMAL)
         win.setpos(26, 37)
-        choix = win.getstr
-        choix = choix[0]
-        case choix.to_i
+        choix = win.getch().to_i
+        case choix
           when 1
             win.close()
             nouvelle_partie
           when 2
             close_screen
             exit()
-          else
-            win.setpos(26, 24)
-            win.addstr("votre choix: ")
-            win.setpos(26, 37)
-            choix = win.getstr
         end
       end
     end

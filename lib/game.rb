@@ -1,13 +1,15 @@
 require_relative 'image'
 require_relative 'victory'
 
+Curses.echo
+
 def nouvelle_partie
     win = Curses::Window.new(30, 60, 1, 2)
     win.clear()
     win.box("|", "-")
     win.setpos(11, 23)
     win.addstr("PARAMETRE")
-
+Curses.echo
     win.setpos(14, 20)
     win.addstr("(O) votre nom: ")
     nom1 = win.getstr()
@@ -25,7 +27,7 @@ def nouvelle_partie
     win.addstr("#{nom2.capitalize!} vous etes le player 2 vous jouer X")
     win.refresh()
     curs_set(0)
-    sleep 2
+    sleep 1.5
 
     win.clear
     win.refresh
@@ -40,7 +42,9 @@ def nouvelle_partie
     Curses.noecho
     choix = 0
 
-    matrice = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    matrice = [0, 0, 0, 
+               0, 0, 0, 
+               0, 0, 0]
 
     loop do
         if $tour == 1
@@ -51,7 +55,7 @@ def nouvelle_partie
             win.addstr("#{nom1} c'est votre tour")
             win.refresh()
             choix = win.getch().to_i
-            while (choix < 1 || choix > 9) || matrice[choix] != 0
+            while choix < 1 || choix > 10 || matrice[(choix - 1)] != 0
                 win.setpos(4, 10)
                 win.attron(color_pair(COLOR_WHITE)|A_NORMAL)
                 win.addstr("                                   ")
@@ -60,7 +64,7 @@ def nouvelle_partie
                 win.refresh()
                 choix = win.getch().to_i
             end
-            matrice[choix] = 1
+            matrice[(choix - 1)] = 1
             image(choix)
             $tour = 2
         else
@@ -71,7 +75,7 @@ def nouvelle_partie
             win.addstr("#{nom2} c'est votre tour")
             win.refresh()
             choix = win.getch().to_i
-            while (choix < 1 || choix > 9) || matrice[choix] != 0
+            while choix < 1 || choix > 11 || matrice[(choix - 1)] != 0
                 win.setpos(4, 10)
                 win.attron(color_pair(COLOR_WHITE)|A_NORMAL)
                 win.addstr("                                   ")
@@ -80,7 +84,7 @@ def nouvelle_partie
                 win.refresh()
                 choix = win.getch().to_i
             end
-            matrice[choix] = 2
+            matrice[(choix - 1)] = 2
             image(choix)
             $tour = 1
         end
@@ -112,7 +116,21 @@ def nouvelle_partie
             $win2.close()
             win.close()
             close_screen
-        end           
+        elsif victory?(matrice) == 3
+             win.clear()
+            win.box("|", "-")
+            win.setpos(11, 24)
+            win.addstr("MACH NULLE")
+            win.setpos(14, 15)
+            win.addstr("#{nom1} et #{nom2} vous ete NULL => NULL")
+            win.setpos(16, 15)
+            win.addstr("Enter pour quitter le jeux")
+            win.refresh()
+            win.getstr
+            $win2.close()
+            win.close()
+            close_screen
+        end                   
     end
 end
 
